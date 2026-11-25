@@ -1,4 +1,4 @@
-# DSA Learning System
+# Personalised DSA Learning System
 
 A web-based platform for practising data structures and algorithms (DSA) and tracking learning progress. Students solve Python problems, review their performance, and receive personalized practice recommendations. The system combines configurable learning rules with an optional machine-learning model trained on recorded attempts.
 
