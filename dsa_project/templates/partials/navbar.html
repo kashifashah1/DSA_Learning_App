@@ -1,0 +1,38 @@
+{# Navigation for logged-in students. Every link here goes to a page that exists. #}
+<header class="bg-navy text-white">
+  <nav class="mx-auto flex max-w-5xl flex-wrap items-center justify-between px-4 py-3 sm:px-6" aria-label="Main">
+    {# The brand takes the student back to the public landing page, like the Home link. #}
+    <a href="{% url 'landing' %}" class="text-lg font-semibold tracking-tight">
+      DSA<span class="text-electric"> Path</span>
+    </a>
+
+    {# Button that opens the menu on small screens #}
+    <button id="menu-button" type="button"
+            class="rounded p-2 text-slate-200 hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-electric sm:hidden"
+            aria-controls="menu" aria-expanded="false" aria-label="Open menu">
+      <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+
+    <ul id="menu" class="hidden w-full flex-col gap-1 pt-3 sm:flex sm:w-auto sm:flex-row sm:flex-wrap sm:items-center sm:pt-0">
+      <li><a href="{% url 'landing' %}" class="nav-link">Home</a></li>
+      <li><a href="{% url 'dashboard' %}" class="nav-link">Dashboard</a></li>
+      <li><a href="{% url 'roadmap' %}" class="nav-link">Roadmap</a></li>
+      <li><a href="{% url 'problems' %}" class="nav-link">Problems</a></li>
+      <li><a href="{% url 'analytics' %}" class="nav-link">Analytics</a></li>
+      <li><a href="{% url 'profile' %}" class="nav-link">Profile</a></li>
+      {% if user.is_staff %}
+        {# Only staff see this: the admin site is where problems and test cases are managed. #}
+        <li><a href="{% url 'admin:index' %}" class="nav-link">Admin</a></li>
+      {% endif %}
+      <li>
+        {# Logout is a POST form (Django requires POST to log out). #}
+        <form method="post" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <button type="submit" class="nav-link w-full text-left">Logout</button>
+        </form>
+      </li>
+    </ul>
+  </nav>
+</header>

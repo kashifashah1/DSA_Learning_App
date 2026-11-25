@@ -1,0 +1,33 @@
+{# Shows a Recommendation (context variable "recommendation"). Used on the result page; the dashboard can reuse it. #}
+{% if recommendation %}
+  <section id="recommendation" aria-labelledby="recommendation-title" class="panel mt-6 border-l-4 border-l-accent p-4 sm:p-5">
+    <div class="flex flex-wrap items-center justify-between gap-2">
+      <h2 id="recommendation-title" class="text-base font-semibold text-primary">Recommended next</h2>
+      <span class="flex items-center gap-2">
+        <span class="badge badge-neutral">{{ recommendation.get_source_display }}</span>
+        <span class="badge badge-info">{{ recommendation.get_activity_display }}</span>
+      </span>
+    </div>
+
+    {% if recommendation.problem %}
+      <p class="mt-3 text-sm font-medium">
+        {{ recommendation.problem.title }}
+        <span class="badge {% if recommendation.problem.difficulty == 'Easy' %}badge-success{% elif recommendation.problem.difficulty == 'Medium' %}badge-warning{% else %}badge-danger{% endif %} ml-1">{{ recommendation.problem.difficulty }}</span>
+      </p>
+    {% endif %}
+
+    <p class="mt-2 text-sm text-muted"><span class="font-medium text-ink">Why:</span> {{ recommendation.reason }}</p>
+
+    <div class="mt-4 flex flex-wrap items-center gap-4">
+      {% if recommendation.problem %}
+        <a href="{% url 'problem_detail' recommendation.problem.pk %}" class="btn btn-primary btn-small">Open this problem</a>
+      {% elif recommendation.topic %}
+        <a href="{% url 'problems' %}?topic={{ recommendation.topic.pk }}" class="btn btn-primary btn-small">See problems in {{ recommendation.topic.name }}</a>
+      {% else %}
+        <a href="{% url 'roadmap' %}" class="btn btn-primary btn-small">Open the roadmap</a>
+      {% endif %}
+      <a href="{% url 'problems' %}" class="text-sm font-medium text-accent underline">Choose any other problem</a>
+    </div>
+    <p class="mt-3 text-xs text-muted">This is only a suggestion. You can open any problem you like.</p>
+  </section>
+{% endif %}

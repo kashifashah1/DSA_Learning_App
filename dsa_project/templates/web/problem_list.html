@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Problems | DSA Path{% endblock %}
+
+{% block content %}
+  <h1 class="text-2xl font-semibold text-navy">Problems</h1>
+
+  {# Filters. They are sent with GET so the page can be bookmarked. #}
+  <form method="get" action="{% url 'problems' %}" class="mt-4 rounded-md border border-slate-200 bg-white p-4" novalidate>
+    {% include "partials/form_errors.html" %}
+    <div class="grid gap-3 sm:grid-cols-3">
+      <div>
+        <label for="{{ form.topic.id_for_label }}" class="block text-sm font-medium">Topic</label>
+        {{ form.topic }}
+      </div>
+      <div>
+        <label for="{{ form.subtopic.id_for_label }}" class="block text-sm font-medium">Subtopic</label>
+        {{ form.subtopic }}
+      </div>
+      <div>
+        <label for="{{ form.difficulty.id_for_label }}" class="block text-sm font-medium">Difficulty</label>
+        {{ form.difficulty }}
+      </div>
+    </div>
+    <div class="mt-4 flex items-center gap-4">
+      <button type="submit"
+              class="rounded-md bg-navy px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-electric">
+        Apply filters
+      </button>
+      <a href="{% url 'problems' %}" class="text-sm font-medium text-violet underline">Clear filters</a>
+    </div>
+  </form>
+
+  {% if rows %}
+    <p class="mt-4 text-sm text-slate-600">{{ rows|length }} problem{{ rows|length|pluralize }}</p>
+
+    <div class="mt-2 overflow-x-auto rounded-md border border-slate-200 bg-white">
+      <table class="min-w-full divide-y divide-slate-200 text-sm">
+        <thead class="bg-slate-50 text-left text-slate-600">
+          <tr>
+            <th scope="col" class="px-4 py-2 font-medium">Problem</th>
+            <th scope="col" class="px-4 py-2 font-medium">Topic / Subtopic</th>
+            <th scope="col" class="px-4 py-2 font-medium">Difficulty</th>
+            <th scope="col" class="px-4 py-2 font-medium">Your status</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+          {% for row in rows %}
+            <tr>
+              <td class="px-4 py-3 font-medium text-slate-900">
+                <a href="{% url 'problem_detail' row.problem.pk %}" class="underline decoration-slate-300 hover:decoration-slate-700">{{ row.problem.title }}</a>
+              </td>
+              <td class="px-4 py-3 text-slate-600">{{ row.problem.subtopic.topic.name }} / {{ row.problem.subtopic.name }}</td>
+              <td class="px-4 py-3">
+                <span class="rounded-full px-2 py-0.5 text-xs font-medium
+                  {% if row.problem.difficulty == 'Easy' %}bg-green-100 text-green-800
+                  {% elif row.problem.difficulty == 'Medium' %}bg-amber-100 text-amber-800
+                  {% else %}bg-red-100 text-red-800{% endif %}">{{ row.problem.difficulty }}</span>
+              </td>
+              <td class="px-4 py-3">
+                {% if row.status == 'solved' %}
+                  <span class="rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800">Solved</span>
+                {% elif row.status == 'attempted' %}
+                  <span class="rounded-full bg-sky-100 px-2 py-0.5 text-xs font-medium text-sky-800">Attempted</span>
+                {% else %}
+                  <span class="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600">Not attempted</span>
+                {% endif %}
+                {% if row.status != 'not_attempted' %}
+                  <a href="{% url 'attempt_history' row.problem.pk %}" class="ml-2 text-xs font-medium text-violet underline">History</a>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% elif filters_used %}
+    <p class="mt-6 rounded-md border border-slate-200 bg-white px-4 py-6 text-center text-sm text-slate-600">
+      No problems match these filters. Change a filter or
+      <a href="{% url 'problems' %}" class="font-medium text-violet underline">clear all filters</a>.
+    </p>
+  {% else %}
+    <p class="mt-6 rounded-md border border-slate-200 bg-white px-4 py-6 text-center text-sm text-slate-600">
+      No problems have been added yet.
+    </p>
+  {% endif %}
+{% endblock %}

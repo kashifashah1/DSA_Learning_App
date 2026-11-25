@@ -1,0 +1,34 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}DSA Path | Learn DSA at Your Pace{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}DSA Path is a student-built platform that tracks your DSA practice, finds weak topics and suggests what to practise next.{% endblock %}">
+
+  {% include "partials/head_assets.html" %}
+</head>
+
+{# Layout for pages that visitors can open without an account (landing page, later more). #}
+<body class="flex min-h-full flex-col bg-canvas text-ink antialiased">
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  {% block navbar %}
+    {% include "partials/public_navbar.html" %}
+  {% endblock %}
+
+  <main id="main" class="flex-1">
+    {% if messages %}
+      <div class="page-container pt-4">{% include "partials/messages.html" %}</div>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+
+  {% block footer %}
+    {% include "partials/public_footer.html" %}
+  {% endblock %}
+
+  <script src="{% static 'js/app.js' %}"></script>
+</body>
+</html>

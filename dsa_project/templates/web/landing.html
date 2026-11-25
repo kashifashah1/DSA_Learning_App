@@ -1,0 +1,215 @@
+{% extends "public_base.html" %}
+
+{% block content %}
+
+  {# ------------------------------------------------------------------ Hero #}
+  <section aria-labelledby="hero-title">
+    <div class="page-container grid gap-10 py-12 lg:grid-cols-2 lg:items-center lg:gap-12 lg:py-20">
+      <div>
+        <p class="eyebrow">Adaptive DSA practice</p>
+        <h1 id="hero-title" class="mt-3 text-3xl font-bold tracking-tight text-primary sm:text-4xl lg:text-5xl lg:leading-tight">
+          Learn DSA at Your Pace. Improve with Every Attempt.
+        </h1>
+        <p class="mt-4 max-w-xl text-base text-muted sm:text-lg">
+          DSA Path records every problem you attempt, shows how you are doing in each topic, and suggests
+          what to practise next: an easier problem, a related one, a revision, or the next topic.
+        </p>
+        <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+          {% if user.is_authenticated %}
+            <a href="{% url 'dashboard' %}" class="btn btn-primary">Open Dashboard</a>
+          {% else %}
+            <a href="{% url 'register' %}" class="btn btn-primary">Start Learning</a>
+          {% endif %}
+          <a href="#features" class="btn btn-secondary">Explore Features</a>
+        </div>
+      </div>
+
+      {# Product preview: a drawn sample of the student screen, NOT real data. #}
+      <figure class="m-0" aria-label="Illustrative preview of the student progress screen">
+        <div class="panel overflow-hidden">
+          <div class="flex items-center justify-between border-b border-line bg-canvas px-4 py-3">
+            <p class="text-sm font-semibold text-primary">Your progress</p>
+            <span class="badge badge-neutral">Illustrative sample</span>
+          </div>
+
+          <div class="space-y-6 p-4 sm:p-5">
+            <div>
+              <h2 class="text-xs font-semibold uppercase tracking-wide text-muted">Topic mastery</h2>
+              <ul class="mt-3 space-y-3">
+                <li>
+                  <div class="flex items-baseline justify-between text-sm">
+                    <span class="font-medium">Arrays</span>
+                    <span class="text-muted">Intermediate</span>
+                  </div>
+                  <div class="mt-1 h-2 rounded-full bg-line" aria-hidden="true"><div class="h-2 w-[62%] rounded-full bg-accent"></div></div>
+                </li>
+                <li>
+                  <div class="flex items-baseline justify-between text-sm">
+                    <span class="font-medium">Strings</span>
+                    <span class="text-muted">Beginner</span>
+                  </div>
+                  <div class="mt-1 h-2 rounded-full bg-line" aria-hidden="true"><div class="h-2 w-[35%] rounded-full bg-accent"></div></div>
+                </li>
+                <li>
+                  <div class="flex items-baseline justify-between text-sm">
+                    <span class="font-medium">Searching and Sorting</span>
+                    <span class="text-muted">Advanced</span>
+                  </div>
+                  <div class="mt-1 h-2 rounded-full bg-line" aria-hidden="true"><div class="h-2 w-[78%] rounded-full bg-accent"></div></div>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h2 class="text-xs font-semibold uppercase tracking-wide text-muted">Recent submissions</h2>
+              <ul class="mt-3 divide-y divide-line rounded-lg border border-line text-sm">
+                <li class="flex items-center justify-between gap-3 px-3 py-2.5">
+                  <div>
+                    <p class="font-medium">Pair With Given Sum</p>
+                    <p class="text-xs text-muted">5 of 5 test cases passed</p>
+                  </div>
+                  <span class="badge badge-success">Passed</span>
+                </li>
+                <li class="flex items-center justify-between gap-3 px-3 py-2.5">
+                  <div>
+                    <p class="font-medium">Palindrome Check</p>
+                    <p class="text-xs text-muted">3 of 5 test cases passed</p>
+                  </div>
+                  <span class="badge badge-danger">Failed</span>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h2 class="text-xs font-semibold uppercase tracking-wide text-muted">Suggested next</h2>
+              <div class="mt-3 rounded-lg border border-line border-l-4 border-l-accent p-3 text-sm">
+                <div class="flex items-center justify-between gap-3">
+                  <p class="font-medium">Count Vowels</p>
+                  <span class="badge badge-success">Easy</span>
+                </div>
+                <p class="mt-1 text-xs text-muted">
+                  Reason: your last Strings attempt did not pass every test case, so an easier problem
+                  in the same topic is suggested.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption class="mt-2 text-xs text-muted">
+          Sample data for illustration only. Your own results appear after you solve problems.
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  {# -------------------------------------------------------------- Features #}
+  <section id="features" class="border-y border-line bg-white" aria-labelledby="features-title">
+    <div class="page-container py-14 lg:py-16">
+      <p class="eyebrow">Features</p>
+      <h2 id="features-title" class="mt-2 text-2xl font-bold tracking-tight text-primary sm:text-3xl">
+        Practise, measure, and know what to do next
+      </h2>
+
+      <div class="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <div>
+          <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50 text-accent">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="5" cy="19" r="2"/><circle cx="19" cy="7" r="2"/>
+              <path d="M7 19h6a3 3 0 0 0 0-6h-2a3 3 0 0 1 0-6h6"/>
+            </svg>
+          </span>
+          <h3 class="mt-4 text-base font-semibold text-primary">Structured DSA Roadmap</h3>
+          <p class="mt-2 text-sm text-muted">Browse topics and subtopics in an organised sequence, so you always know where you are.</p>
+        </div>
+
+        <div>
+          <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50 text-accent">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M8 8l-4 4 4 4M16 8l4 4-4 4M14 5l-4 14"/>
+            </svg>
+          </span>
+          <h3 class="mt-4 text-base font-semibold text-primary">Practice Problems</h3>
+          <p class="mt-2 text-sm text-muted">Solve problems in Python and get feedback from test cases on every submission.</p>
+        </div>
+
+        <div>
+          <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50 text-accent">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 20v-6M11 20V5M17 20v-9M3 20h18"/>
+            </svg>
+          </span>
+          <h3 class="mt-4 text-base font-semibold text-primary">Performance Analytics</h3>
+          <p class="mt-2 text-sm text-muted">Understand your accuracy, solving time and progress in each topic.</p>
+        </div>
+
+        <div>
+          <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50 text-accent">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/>
+            </svg>
+          </span>
+          <h3 class="mt-4 text-base font-semibold text-primary">Adaptive Recommendations</h3>
+          <p class="mt-2 text-sm text-muted">Get suggestions for revision, related practice, or an easier or harder problem.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {# ---------------------------------------------------------- How it works #}
+  <section id="how-it-works" aria-labelledby="how-title">
+    <div class="page-container py-14 lg:py-16">
+      <p class="eyebrow">How it works</p>
+      <h2 id="how-title" class="mt-2 text-2xl font-bold tracking-tight text-primary sm:text-3xl">Three steps, repeated</h2>
+
+      <ol class="mt-10 grid gap-8 md:grid-cols-3">
+        <li class="flex gap-4">
+          <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-semibold text-white" aria-hidden="true">1</span>
+          <div>
+            <h3 class="text-base font-semibold text-primary">Solve a DSA problem</h3>
+            <p class="mt-1 text-sm text-muted">Pick a problem from the roadmap, write your solution in Python and submit it.</p>
+          </div>
+        </li>
+        <li class="flex gap-4">
+          <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-semibold text-white" aria-hidden="true">2</span>
+          <div>
+            <h3 class="text-base font-semibold text-primary">Review your results</h3>
+            <p class="mt-1 text-sm text-muted">See which test cases passed, then check how your performance in that topic is changing.</p>
+          </div>
+        </li>
+        <li class="flex gap-4">
+          <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-semibold text-white" aria-hidden="true">3</span>
+          <div>
+            <h3 class="text-base font-semibold text-primary">Practise what is recommended</h3>
+            <p class="mt-1 text-sm text-muted">Follow the suggested next activity, together with the reason it was chosen.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  {# ----------------------------------------------------------------- About #}
+  <section id="about" class="border-t border-line bg-white" aria-labelledby="about-title">
+    <div class="page-container grid gap-8 py-14 lg:grid-cols-5 lg:py-16">
+      <div class="lg:col-span-3">
+        <p class="eyebrow">About the project</p>
+        <h2 id="about-title" class="mt-2 text-2xl font-bold tracking-tight text-primary sm:text-3xl">A student project built to be explained</h2>
+        <p class="mt-4 text-sm text-muted sm:text-base">
+          DSA Path is an educational project developed by a student as a B.Tech Project-1 at Medicaps University.
+          It records every attempt, calculates topic-wise performance, and recommends the next activity.
+        </p>
+        <p class="mt-3 text-sm text-muted sm:text-base">
+          Recommendations start with clear, simple rules. When enough attempt data has been collected, a
+          machine-learning model can help choose between problems. Until then, the rules work on their own.
+        </p>
+      </div>
+
+      <dl class="panel divide-y divide-line self-start text-sm lg:col-span-2">
+        <div class="flex justify-between gap-4 px-4 py-3"><dt class="text-muted">Backend</dt><dd class="font-medium">Django, Django REST Framework</dd></div>
+        <div class="flex justify-between gap-4 px-4 py-3"><dt class="text-muted">Database</dt><dd class="font-medium">PostgreSQL</dd></div>
+        <div class="flex justify-between gap-4 px-4 py-3"><dt class="text-muted">Interface</dt><dd class="font-medium">Django Templates, Tailwind CSS</dd></div>
+        <div class="flex justify-between gap-4 px-4 py-3"><dt class="text-muted">Recommendations</dt><dd class="font-medium">Rules, Scikit-learn</dd></div>
+      </dl>
+    </div>
+  </section>
+
+{% endblock %}

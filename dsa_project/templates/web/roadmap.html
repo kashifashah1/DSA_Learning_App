@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Roadmap | DSA Path{% endblock %}
+
+{% block content %}
+  <h1 class="text-2xl font-semibold text-primary">Roadmap</h1>
+  <p class="mt-1 text-sm text-muted">Topics in the order you should learn them, with your level in each.</p>
+
+  {% for item in topics %}
+    <section class="panel mt-6">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-line px-4 py-3">
+        <h2 class="text-lg font-semibold text-primary">{{ forloop.counter }}. {{ item.topic.name }}</h2>
+        <span class="flex items-center gap-2">
+          {% if item.mastery is None %}
+            <span class="badge badge-neutral">Not enough data yet</span>
+          {% else %}
+            <span class="badge {% if item.level == 'Advanced' %}badge-success{% elif item.level == 'Intermediate' %}badge-info{% else %}badge-warning{% endif %}">{{ item.level }}</span>
+          {% endif %}
+        </span>
+      </div>
+
+      <p class="border-b border-line px-4 py-2 text-xs text-muted">
+        {% if item.mastery is None %}
+          {% if item.attempts_needed %}Needs {{ item.attempts_needed }} more attempt{{ item.attempts_needed|pluralize }} in this topic before a level can be shown.
+          {% else %}Solve a problem in this topic to see your level.{% endif %}
+        {% else %}
+          Mastery score {{ item.mastery|floatformat:0 }} out of 100, from your {{ item.attempts }} attempt{{ item.attempts|pluralize }} in this topic.
+        {% endif %}
+      </p>
+
+      {% if item.subtopics %}
+        <ul class="divide-y divide-line">
+          {% for sub in item.subtopics %}
+            <li class="flex flex-wrap items-center justify-between gap-2 px-4 py-3 text-sm">
+              <a href="{% url 'problems' %}?subtopic={{ sub.subtopic.pk }}" class="font-medium text-accent underline">{{ sub.subtopic.name }}</a>
+              <span class="text-muted">{{ sub.solved_count }} of {{ sub.problem_count }} solved</span>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="px-4 py-3 text-sm text-muted">No subtopics in this topic yet.</p>
+      {% endif %}
+    </section>
+  {% empty %}
+    <p class="panel mt-6 px-4 py-6 text-center text-sm text-muted">No topics have been added yet.</p>
+  {% endfor %}
+{% endblock %}

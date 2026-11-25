@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Create account | DSA Path{% endblock %}
+
+{# No navigation bar on the registration page. #}
+{% block navbar %}{% endblock %}
+
+{% block content %}
+  <div class="mx-auto mt-8 w-full max-w-sm">
+    {% include "partials/auth_brand.html" %}
+    <h1 class="mt-6 text-xl font-semibold text-primary">Create your account</h1>
+    <p class="mt-1 text-sm text-muted">Your e-mail is your login name.</p>
+
+    <form method="post" class="panel mt-5 p-5" novalidate>
+      {% csrf_token %}
+      {% include "partials/form_errors.html" %}
+
+      <label for="{{ form.name.id_for_label }}" class="block text-sm font-medium">Name</label>
+      {{ form.name }}
+
+      <label for="{{ form.email.id_for_label }}" class="mt-4 block text-sm font-medium">E-mail</label>
+      {{ form.email }}
+
+      <label for="{{ form.password1.id_for_label }}" class="mt-4 block text-sm font-medium">Password</label>
+      {{ form.password1 }}
+      <div class="mt-1 text-xs text-slate-500 [&_ul]:list-disc [&_ul]:pl-4">{{ form.password1.help_text|safe }}</div>
+
+      <label for="{{ form.password2.id_for_label }}" class="mt-4 block text-sm font-medium">Confirm password</label>
+      {{ form.password2 }}
+
+      <button type="submit" class="btn btn-primary mt-6 w-full">Create account</button>
+    </form>
+
+    <p class="mt-4 text-sm text-muted">
+      Already registered? <a href="{% url 'login' %}" class="font-medium text-accent underline">Log in</a>
+    </p>
+  </div>
+{% endblock %}

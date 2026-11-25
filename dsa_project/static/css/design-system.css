@@ -1,0 +1,129 @@
+/* ==========================================================================
+   DSA Path design system: shared by every page.
+   Colours also exist in the Tailwind config (templates/partials/head_assets.html).
+   Keep the two lists in step if a colour ever changes.
+   ========================================================================== */
+
+:root {
+  --color-primary: #172554;
+  --color-accent: #2563eb;
+  --color-accent-dark: #1d4ed8;
+  --color-canvas: #f8fafc;
+  --color-surface: #ffffff;
+  --color-ink: #0f172a;
+  --color-muted: #64748b;
+  --color-line: #e2e8f0;
+  --color-success: #15803d;
+  --color-warning: #b45309;
+  --color-danger: #b91c1c;
+  --radius: 0.5rem;
+}
+
+/* Smooth scrolling for in-page links, switched off for people who prefer less motion. */
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+/* In-page targets stay visible below the sticky header. */
+[id] { scroll-margin-top: 5rem; }
+
+/* Page width and side padding, used by every section. */
+.page-container {
+  width: 100%;
+  max-width: 72rem;
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+@media (min-width: 640px) { .page-container { padding-inline: 1.5rem; } }
+@media (min-width: 1024px) { .page-container { padding-inline: 2rem; } }
+
+/* Keyboard focus: one clear ring everywhere. */
+:where(a, button, input, select, textarea, summary):focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Skip link: first thing a keyboard user can reach. */
+.skip-link {
+  position: absolute;
+  left: 0.5rem;
+  top: -4rem;
+  z-index: 100;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius);
+  background: var(--color-primary);
+  color: #fff;
+  font-weight: 600;
+}
+.skip-link:focus { top: 0.5rem; }
+
+/* Buttons ---------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.125rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.25rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+}
+.btn-primary { background: var(--color-accent); color: #fff; }
+.btn-primary:hover { background: var(--color-accent-dark); }
+.btn-secondary { background: var(--color-surface); color: var(--color-ink); border-color: #cbd5e1; }
+.btn-secondary:hover { background: var(--color-canvas); border-color: var(--color-muted); }
+.btn-small { padding: 0.4375rem 0.875rem; font-size: 0.875rem; }
+.btn:disabled, .btn[aria-disabled="true"] { opacity: 0.55; cursor: not-allowed; }
+
+/* Links in the public navigation bar */
+.public-link {
+  display: block;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius);
+  color: var(--color-muted);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  text-decoration: none;
+}
+.public-link:hover { color: var(--color-primary); background: var(--color-canvas); }
+
+/* Small label above a heading */
+.eyebrow {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+/* Badges: text always says what the state is; colour only supports it. */
+.badge {
+  display: inline-block;
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.25rem;
+  white-space: nowrap;
+}
+.badge-success { background: #dcfce7; color: var(--color-success); }
+.badge-warning { background: #fef3c7; color: var(--color-warning); }
+.badge-danger  { background: #fee2e2; color: var(--color-danger); }
+.badge-info    { background: #dbeafe; color: #1e40af; }
+.badge-neutral { background: #f1f5f9; color: #475569; }
+
+/* Surface used for panels */
+.panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: 0.75rem;
+}
+
+/* Links on the dark footer */
+.footer-link { color: #cbd5e1; text-decoration: none; }
+.footer-link:hover { color: #ffffff; text-decoration: underline; }
+.footer-link:focus-visible { outline-color: #93c5fd; }

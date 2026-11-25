@@ -1,0 +1,12 @@
+{# Use in any form page:  {% include "partials/form_errors.html" with form=form %} #}
+{# Validation errors get the same red style as error messages. #}
+{% if form.errors %}
+  <div role="alert" class="mb-4 rounded-md border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-800">
+    <ul class="list-disc space-y-1 pl-5">
+      {% for field in form %}
+        {% for error in field.errors %}<li>{{ field.label }}: {{ error }}</li>{% endfor %}
+      {% endfor %}
+      {% for error in form.non_field_errors %}<li>{{ error }}</li>{% endfor %}
+    </ul>
+  </div>
+{% endif %}

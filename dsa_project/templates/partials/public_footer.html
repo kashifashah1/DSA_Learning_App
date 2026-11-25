@@ -1,0 +1,33 @@
+<footer class="bg-primary text-slate-300">
+  <div class="page-container grid gap-8 py-10 md:grid-cols-3">
+    <div>
+      <p class="text-lg font-bold text-white">DSA Path</p>
+      <p class="mt-2 max-w-xs text-sm">
+        A student-built learning platform that tracks DSA practice and suggests what to practise next.
+      </p>
+    </div>
+
+    <nav aria-label="Footer">
+      <p class="text-sm font-semibold text-white">Links</p>
+      <ul class="mt-3 space-y-2 text-sm">
+        <li><a href="{% url 'landing' %}" class="footer-link">Home</a></li>
+        <li><a href="{% url 'landing' %}#features" class="footer-link">Features</a></li>
+        {% if user.is_authenticated %}
+          <li><a href="{% url 'dashboard' %}" class="footer-link">Dashboard</a></li>
+        {% else %}
+          <li><a href="{% url 'login' %}" class="footer-link">Login</a></li>
+          <li><a href="{% url 'register' %}" class="footer-link">Register</a></li>
+        {% endif %}
+      </ul>
+    </nav>
+
+    <div>
+      <p class="text-sm font-semibold text-white">About</p>
+      <p class="mt-3 text-sm">B.Tech Project-1, Medicaps University, 2026.</p>
+    </div>
+  </div>
+
+  <div class="border-t border-white/10">
+    <p class="page-container py-4 text-xs">&copy; {% now "Y" %} DSA Path. A student project for learning and demonstration.</p>
+  </div>
+</footer>

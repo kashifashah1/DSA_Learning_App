@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Not allowed | DSA Path{% endblock %}
+{% block navbar %}{% if user.is_authenticated %}{% include "partials/navbar.html" %}{% else %}{% include "partials/public_navbar.html" %}{% endif %}{% endblock %}
+
+{% block content %}
+  <section class="panel mx-auto mt-8 max-w-lg px-4 py-8 text-center sm:px-8">
+    <p class="text-sm font-semibold text-muted">Error 403</p>
+    <h1 class="mt-1 text-xl font-semibold text-primary">You are not allowed to open this page</h1>
+    <p class="mt-2 text-sm text-muted">This page is only for staff, or your session has expired. Reload the page and try again.</p>
+    <div class="mt-5 flex justify-center">
+      <a href="{% url 'landing' %}" class="btn btn-primary">Go to the home page</a>
+    </div>
+  </section>
+{% endblock %}

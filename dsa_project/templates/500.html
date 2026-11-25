@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Something went wrong | DSA Path{% endblock %}
+
+{# The 500 page is drawn without a request, so it uses only the public navigation bar. #}
+{% block navbar %}{% include "partials/public_navbar.html" %}{% endblock %}
+
+{% block content %}
+  <section class="panel mx-auto mt-8 max-w-lg px-4 py-8 text-center sm:px-8">
+    <p class="text-sm font-semibold text-muted">Error 500</p>
+    <h1 class="mt-1 text-xl font-semibold text-primary">Something went wrong on our side</h1>
+    <p class="mt-2 text-sm text-muted">The problem has been written to the log. Your saved submissions are not lost. Please try again in a moment.</p>
+    <div class="mt-5 flex justify-center">
+      <a href="{% url 'landing' %}" class="btn btn-primary">Go to the home page</a>
+    </div>
+  </section>
+{% endblock %}

@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ problem.title }} | DSA Path{% endblock %}
+
+{% block content %}
+  <nav aria-label="Breadcrumb" class="text-sm text-muted">
+    <ol class="flex flex-wrap items-center gap-1">
+      <li><a href="{% url 'problems' %}" class="underline hover:text-primary">Problems</a></li>
+      <li aria-hidden="true">/</li>
+      <li aria-current="page" class="font-medium text-ink">{{ problem.title }}</li>
+    </ol>
+  </nav>
+
+  <h1 class="mt-3 text-2xl font-semibold text-primary">{{ problem.title }}</h1>
+  <p class="mt-1 flex flex-wrap items-center gap-2 text-sm text-muted">
+    <span class="badge {% if problem.difficulty == 'Easy' %}badge-success{% elif problem.difficulty == 'Medium' %}badge-warning{% else %}badge-danger{% endif %}">{{ problem.difficulty }}</span>
+    <span>{{ problem.subtopic.topic.name }} / {{ problem.subtopic.name }}</span>
+  </p>
+
+  <div class="mt-6 grid gap-6 lg:grid-cols-2 lg:items-start">
+
+    {# ---------------------------------------------- Statement and samples #}
+    <div>
+      <section aria-labelledby="statement-title" class="panel p-4 sm:p-5">
+        <h2 id="statement-title" class="text-base font-semibold text-primary">Problem</h2>
+        <div class="mt-3 whitespace-pre-line text-sm leading-relaxed">{{ problem.statement }}</div>
+      </section>
+
+      <section aria-labelledby="samples-title" class="mt-6">
+        <h2 id="samples-title" class="text-base font-semibold text-primary">Sample test cases</h2>
+        {% for sample in samples %}
+          <div class="panel mt-3 p-4">
+            <p class="text-sm font-medium">Sample {{ forloop.counter }}</p>
+            <div class="mt-2 grid gap-3 sm:grid-cols-2">
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-wide text-muted">Input</p>
+                <pre class="mt-1 overflow-x-auto rounded-md bg-canvas p-3 font-mono text-sm">{{ sample.input_data }}</pre>
+              </div>
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-wide text-muted">Expected output</p>
+                <pre class="mt-1 overflow-x-auto rounded-md bg-canvas p-3 font-mono text-sm">{{ sample.expected_output }}</pre>
+              </div>
+            </div>
+          </div>
+        {% empty %}
+          <p class="mt-2 text-sm text-muted">This problem has no sample test cases.</p>
+        {% endfor %}
+      </section>
+    </div>
+
+    {# ------------------------------------------------ Code area and result #}
+    <div>
+      <form method="post" action="{% url 'problem_detail' problem.pk %}" id="submit-form" class="panel p-4 sm:p-5" novalidate>
+        {% csrf_token %}
+        <label for="source_code" class="block text-base font-semibold text-primary">Your solution (Python 3)</label>
+        <p id="code-help" class="mt-1 text-sm text-muted">
+          Read the input with <code class="font-mono">input()</code> and print the answer.
+          Every test case has a time limit of {{ time_limit }} second{{ time_limit|pluralize }}.
+        </p>
+        <textarea id="source_code" name="source_code" rows="16" aria-describedby="code-help"
+                  spellcheck="false" autocomplete="off" autocapitalize="off"
+                  class="mt-3 block w-full rounded-lg border border-line bg-white p-3 font-mono text-sm leading-relaxed focus:border-accent"
+                  placeholder="# Write your Python code here">{{ source_code }}</textarea>
+
+        <div class="mt-4 flex flex-wrap items-center gap-4">
+          <button type="submit" id="submit-button" class="btn btn-primary">Submit</button>
+          <a href="{% url 'attempt_history' problem.pk %}" class="text-sm font-medium text-accent underline">View my attempts</a>
+        </div>
+      </form>
+
+      {# ----------------------------------------------------------- Result #}
+      {% if attempt %}
+        <section id="result" aria-labelledby="result-title" class="panel mt-6 p-4 sm:p-5">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <h2 id="result-title" class="text-base font-semibold text-primary">Result of attempt #{{ attempt.attempt_no }}</h2>
+            {% if attempt.is_correct %}<span class="badge badge-success">Passed</span>{% else %}<span class="badge badge-danger">Not passed</span>{% endif %}
+          </div>
+          <p class="mt-2 text-sm">
+            <span class="font-semibold">{{ attempt.tests_passed }} of {{ attempt.tests_total }}</span> test cases passed
+            <span class="text-muted">(time taken {{ attempt.time_taken_display }})</span>
+          </p>
+
+          <ul class="mt-4 divide-y divide-line rounded-lg border border-line text-sm">
+            {% for result in results %}
+              <li class="px-3 py-3">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                  <p class="font-medium">
+                    Test case {{ forloop.counter }}
+                    <span class="font-normal text-muted">({% if result.test_case.is_sample %}sample{% else %}hidden{% endif %})</span>
+                  </p>
+                  <p class="flex items-center gap-3">
+                    <span class="text-xs text-muted">{{ result.exec_time_ms }} ms</span>
+                    <span class="badge {% if result.status == 'PASSED' %}badge-success{% elif result.status == 'TLE' %}badge-warning{% else %}badge-danger{% endif %}">{{ result.get_status_display }}</span>
+                  </p>
+                </div>
+                {% if result.status == 'FAILED' %}
+                  <p class="mt-1 text-xs text-muted">Your program ran, but its output was not the expected output.</p>
+                {% elif result.status == 'TLE' %}
+                  <p class="mt-1 text-xs text-muted">{{ result.error_message }}</p>
+                {% elif result.status == 'ERROR' %}
+                  <pre class="mt-2 overflow-x-auto rounded-md bg-slate-900 p-3 font-mono text-xs leading-relaxed text-slate-100">{{ result.error_message }}</pre>
+                {% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+
+          <p class="mt-4 text-sm">
+            <a href="{% url 'attempt_history' problem.pk %}" class="font-medium text-accent underline">See all my attempts for this problem</a>
+          </p>
+        </section>
+
+        {% include "partials/recommendation_card.html" %}
+      {% endif %}
+    </div>
+  </div>
+
+  <script src="{% static 'js/problem_page.js' %}"></script>
+{% endblock %}

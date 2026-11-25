@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | DSA Path{% endblock %}
+
+{% block content %}
+  <h1 class="text-2xl font-semibold text-primary">Welcome back, {{ user.name }}</h1>
+  <p class="mt-1 text-sm text-muted">Your progress at a glance.</p>
+
+  {% if not data.has_attempts %}
+    {# New student: no numbers at all, only a clear way to start. #}
+    <section class="panel mt-6 px-4 py-8 text-center sm:px-8">
+      <h2 class="text-lg font-semibold text-primary">Let's solve your first problem</h2>
+      <p class="mx-auto mt-2 max-w-md text-sm text-muted">
+        You have not submitted a solution yet. After your first one, this page shows your progress
+        and a recommendation for what to practise next.
+      </p>
+      <div class="mt-5 flex flex-col items-center justify-center gap-3 sm:flex-row">
+        <a href="{% url 'problems' %}" class="btn btn-primary">Browse problems</a>
+        <a href="{% url 'roadmap' %}" class="btn btn-secondary">See the roadmap</a>
+      </div>
+    </section>
+  {% else %}
+    <dl class="mt-6 grid gap-4 sm:grid-cols-3">
+      <div class="panel p-4">
+        <dt class="text-xs font-semibold uppercase tracking-wide text-muted">Problems solved</dt>
+        <dd class="mt-1 text-2xl font-semibold text-primary">{{ data.solved_count }} <span class="text-sm font-normal text-muted">of {{ data.total_problems }}</span></dd>
+      </div>
+      <div class="panel p-4">
+        <dt class="text-xs font-semibold uppercase tracking-wide text-muted">Problems tried</dt>
+        <dd class="mt-1 text-2xl font-semibold text-primary">{{ data.tried_count }}</dd>
+      </div>
+      <div class="panel p-4">
+        <dt class="text-xs font-semibold uppercase tracking-wide text-muted">Submissions</dt>
+        <dd class="mt-1 text-2xl font-semibold text-primary">{{ data.attempts_count }}</dd>
+      </div>
+    </dl>
+
+    {# Skill and topics: only topics with enough submissions are ranked. #}
+    <section aria-labelledby="skill-title" class="mt-6 grid gap-4 sm:grid-cols-3">
+      <div class="panel p-4">
+        <h2 id="skill-title" class="text-sm font-semibold text-primary">Overall skill</h2>
+        {% if data.overall_skill is not None %}
+          <p class="mt-1 text-2xl font-semibold text-primary" id="overall-skill">{{ data.overall_skill|floatformat:0 }} <span class="text-sm font-normal text-muted">/ 100</span></p>
+          <p class="mt-1"><span class="badge badge-info">{{ data.overall_level }}</span></p>
+        {% else %}
+          <p class="mt-2 text-sm text-muted" id="overall-skill">Not enough data yet. Submit at least 3 solutions in one topic.</p>
+        {% endif %}
+        <p class="mt-3 text-xs text-muted">The average mastery of your topics, from 0 to 100. Below 40 is Beginner, 40 to 70 Intermediate, above 70 Advanced.</p>
+      </div>
+      <div class="panel p-4">
+        <h2 class="text-sm font-semibold text-primary">Strong topics</h2>
+        <ul class="mt-2 space-y-1 text-sm" id="strong-topics">
+          {% for row in data.strong_topics %}
+            <li class="flex items-center justify-between gap-2"><span>{{ row.topic.name }}</span><span class="badge badge-success">{{ row.mastery_score|floatformat:0 }}</span></li>
+          {% empty %}
+            <li class="text-muted">None yet.</li>
+          {% endfor %}
+        </ul>
+        <p class="mt-3 text-xs text-muted">Topics where your mastery is highest.</p>
+      </div>
+      <div class="panel p-4">
+        <h2 class="text-sm font-semibold text-primary">Topics to improve</h2>
+        <ul class="mt-2 space-y-1 text-sm" id="weak-topics">
+          {% for row in data.weak_topics %}
+            <li class="flex items-center justify-between gap-2"><span>{{ row.topic.name }}</span><span class="badge badge-warning">{{ row.mastery_score|floatformat:0 }}</span></li>
+          {% empty %}
+            <li class="text-muted">None yet.</li>
+          {% endfor %}
+        </ul>
+        <p class="mt-3 text-xs text-muted">Topics where your mastery is lowest. A little practice here helps the most.</p>
+      </div>
+    </section>
+
+    {% with recommendation=data.recommendation %}
+      {% if recommendation %}
+        {% include "partials/recommendation_card.html" %}
+      {% else %}
+        <section class="panel mt-6 p-4 text-sm text-muted">
+          You will get a recommendation after your next submission.
+          <a href="{% url 'problems' %}" class="font-medium text-accent underline">Browse problems</a>
+        </section>
+      {% endif %}
+    {% endwith %}
+
+    <section aria-labelledby="recent-title" class="mt-6">
+      <div class="flex items-center justify-between">
+        <h2 id="recent-title" class="text-base font-semibold text-primary">Recent attempts</h2>
+        <span class="flex gap-4"><a href="{% url 'analytics' %}" class="text-sm font-medium text-accent underline">See charts</a><a href="{% url 'roadmap' %}" class="text-sm font-medium text-accent underline">See the roadmap</a></span>
+      </div>
+      <div class="panel mt-2 overflow-x-auto">
+        <table class="min-w-full divide-y divide-line text-sm">
+          <thead class="bg-canvas text-left text-muted">
+            <tr>
+              <th scope="col" class="px-4 py-2 font-medium">Problem</th>
+              <th scope="col" class="px-4 py-2 font-medium">Result</th>
+              <th scope="col" class="px-4 py-2 font-medium">Test cases passed</th>
+              <th scope="col" class="px-4 py-2 font-medium">Submitted</th>
+              <th scope="col" class="px-4 py-2"><span class="sr-only">History</span></th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-line">
+            {% for attempt in data.recent_attempts %}
+              <tr>
+                <td class="px-4 py-3 font-medium"><a href="{% url 'problem_detail' attempt.problem.pk %}" class="underline decoration-slate-300 hover:decoration-slate-700">{{ attempt.problem.title }}</a></td>
+                <td class="px-4 py-3">
+                  {% if attempt.is_correct %}<span class="badge badge-success">Passed</span>{% else %}<span class="badge badge-danger">Failed</span>{% endif %}
+                </td>
+                <td class="px-4 py-3">{{ attempt.tests_passed }} of {{ attempt.tests_total }}</td>
+                <td class="whitespace-nowrap px-4 py-3">{{ attempt.submitted_at|date:"j M Y, H:i" }}</td>
+                <td class="px-4 py-3 text-right"><a href="{% url 'attempt_history' attempt.problem.pk %}" class="text-xs font-medium text-accent underline">All attempts</a></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  {% endif %}
+{% endblock %}
